@@ -1,5 +1,6 @@
 import socket
 import sys
+import json
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <ip> ")
@@ -19,10 +20,12 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 username = input("Enter your username: ")
+password = input("Enter your password: ")
 #if(username is in database):
 #    ask password
 #else:
 #    ask if you want to create account
+
 
 
 sock.connect((SERVER_IP, SERVER_PORT))
