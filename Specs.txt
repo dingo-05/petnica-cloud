@@ -1,0 +1,12 @@
+Cloud server
+
+Req:
+
+1.Connect, save, download
+2.user login
+
+Additional Req:
+
+1.save only changes to the file
+2.share file with other users
+3.sync files
