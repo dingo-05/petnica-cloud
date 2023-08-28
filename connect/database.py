@@ -25,9 +25,10 @@ def verify_data(username, password):
             if user['username'] == username: 
                 if user['password'] == password:
                     print(f"Welcome {username}")
-                    break
+                    return 1
                 else: 
                     print(f"Invalid password")
+                    return 2
             else: 
                 print(f"Do you want to crate new account? 1 - YES / 2 - NO")
                 ans = input()
@@ -43,3 +44,4 @@ def verify_data(username, password):
                     json.dump(data, json_file)
                 else: 
                     break
+verify_data("LebronJames","stephrncurry")

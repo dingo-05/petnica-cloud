@@ -1,6 +1,7 @@
 import socket
 import sys
 import json
+import database
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <ip> ")
@@ -17,14 +18,15 @@ def receiveMessage(conn, length):
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-
-
-username = input("Enter your username: ")
-password = input("Enter your password: ")
-#if(username is in database):
-#    ask password
-#else:
-#    ask if you want to create account
+bool = True
+while bool:
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    database.verify_data(username, password)
+    #if(username is in database):
+    #    ask password
+    #else:
+    #    ask if you want to create account
 
 
 
