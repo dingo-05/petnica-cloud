@@ -23,6 +23,8 @@ def set_folder_permissions(username):
     
     print(f"Permissions set for user '{username}'")
 
+    subprocess.run(['explorer',folder_path])
+
 if __name__ == "__main__":
     username = input("Enter the username: ")
     
