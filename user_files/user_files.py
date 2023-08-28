@@ -15,6 +15,15 @@ def create_user_folder(username):
         os.mkdir(server_path)
         print(f"Folder created for user '{username}'")
 
+def create_subfolder(username):
+    server_path = fr'C:\Mladen\Piton\Users\{username}'
+    subfolder_name = input("Enter the name of the subfolder: ")
+    subfolder_path = os.path.join(server_path, subfolder_name)
+    
+    # Create subfolder
+    os.mkdir(subfolder_path)
+    print(f"Subfolder '{subfolder_name}' created under user '{username}' folder")
+
 def set_folder_permissions(username):
     server_path = fr'C:\Mladen\Piton\Users\{username}'
     
