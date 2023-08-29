@@ -19,6 +19,8 @@ def openMenu(command,con,path1,home_path1):
         return makeDIR()
     elif(command == 'cd'):
         return changeDIR()
+    elif(command == 'dir'):
+        return listDIR()
     print('Unknown command')
     return ()
 
@@ -94,3 +96,12 @@ def changeDIR():
         return path
     connbuf.put_utf8(dir_path)
     return dir_path
+def listDIR():
+    print('listing directory')
+    listing = os.listdir(path)
+    print(listing)
+    list = ''
+    for item in listing:
+        list += item + '\n'
+    connbuf.put_utf8(list)
+    return path

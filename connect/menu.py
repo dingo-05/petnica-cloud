@@ -19,6 +19,8 @@ def openMenu(text,sock):
         return makeDIR(text.split(" ")[1])
     elif(command == 'cd'):
         return changeDIR(text.split(" ")[1])
+    elif(command == 'dir' or command == 'ls'):
+        return listDIR()
     elif(command == 'help'):
         print('There are folowing commands:\nupload - uploads file from the server\ndownload - downloads file from the server\nmkdir - create a new directory\ncd - change directory\nhelp - help with commands')
         return ()
@@ -87,4 +89,11 @@ def changeDIR(dir_name):
     sbuf.put_utf8(command)
     sbuf.put_utf8(dir_name)
     message=sbuf.get_utf8()
+    print(message)
+
+def listDIR():
+    sbuf = buffer.Buffer(sock_global)
+    command = 'dir'
+    sbuf.put_utf8(command)
+    message = sbuf.get_utf8()
     print(message)
