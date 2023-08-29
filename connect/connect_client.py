@@ -2,6 +2,7 @@ import socket
 import sys
 import headers
 import menu
+import buffer
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <ip> ")
@@ -29,12 +30,12 @@ username = input("Enter your username: ")
 
 sock.connect((SERVER_IP, SERVER_PORT))
 try:
+    sbuff=buffer.Buffer(sock)
+    sbuff.put_utf8(username)
     while True:
         msg = input("Enter command: ")#change later with location in files
         menu.openMenu(msg,sock)
         print("Menu Closed")
-
-        print(msg)
 except KeyboardInterrupt:
     sock.close()
     exit()

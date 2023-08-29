@@ -22,9 +22,16 @@ def receiveMessage(conn, length):
 
 def handleConnection(conn, addr):
     connbuf = buffer.Buffer(conn)
+    username=connbuf.get_utf8()
+    default="d:\\database\\"
+    home_path=default+username+'\\'
+    path=home_path
+    if not os.path.exists(path):
+        os.makedirs(path)
     while True:
+        print('Listening for user:',username)
         command = connbuf.get_utf8()
-        menu_server.openMenu(command,connbuf)
+        path=menu_server.openMenu(command,connbuf,path,home_path)
         
 
     conn.close()

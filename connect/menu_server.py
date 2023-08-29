@@ -4,16 +4,20 @@ import headers
 import buffer
 
 
-def openMenu(command,con):
+def openMenu(command,con,path1,home_path1):
     global connbuf
+    global path
+    global home_path
     connbuf = con
+    path=path1
+    home_path=home_path1
     if(command == 'upload'):
         return upload()
-    if(command == 'download'):
-        return download(text.split(" ")[1])
-    if(command == 'mkdir'):
+    elif(command == 'download'):
+        return download()
+    elif(command == 'mkdir'):
         return makeDIR(text.split(" ")[1])
-    if(command == 'cd'):
+    elif(command == 'cd'):
         return changeDIR(text.split(" ")[1])
     print('Unknown command')
     return ()
@@ -23,7 +27,7 @@ def upload():
     if '\\' in file_name:
         file_name = file_name.split('\\')[-1]
     print(file_name)
-    file_name = os.path.join('d:\\',file_name)
+    file_name = os.path.join(path,file_name)
     print('file name: ', file_name)
     
     file_size = int(connbuf.get_utf8())
@@ -41,5 +45,21 @@ def upload():
                 print('File incomplete.  Missing',remaining,'bytes.')
             else:
                 print('File received successfully.')
+    return path
+def download():
+    print('Sending file')
+    file_name = connbuf.get_utf8()
+    file_name = os.path.join(path,file_name)
+    print(file_name)
+    if not os.path.isfile(file_name):
+        print("File not found")
+        connbuf.put_utf8('File not found')
+        return path
+    connbuf.put_utf8('File found')
+    file_size = os.path.getsize(file_name)
+    connbuf.put_utf8(str(file_size))
+    with open(file_name, 'rb') as f:
+            connbuf.put_bytes(f.read())
+    return path
     
     
