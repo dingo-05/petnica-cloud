@@ -1,5 +1,7 @@
 import socket
 import sys
+import headers
+import menu
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <ip> ")
@@ -28,23 +30,11 @@ username = input("Enter your username: ")
 sock.connect((SERVER_IP, SERVER_PORT))
 try:
     while True:
-        msg = input("Enter your message: ")
-        msg = f"[{username}]: {msg}"
-#        msg = headers.appendHeaders(msg)
-        sock.send(msg)
+        msg = input("Enter command: ")#change later with location in files
+        menu.openMenu(msg,sock)
+        print("Menu Closed")
 
-#        try:
-#            msgSize = int.from_bytes(receiveMessage(sock, headers.HEADER_LEN))
-#            msg = b''
-#            while len(msg) < msgSize:
-#                msg += receiveMessage(sock, msgSize - len(msg))
-#            msg = msg.decode()
-#
-#        except Exception as e:
-#            print(f"Error: {e}")
-#            break
-#
-#        print(msg)
+        print(msg)
 except KeyboardInterrupt:
     sock.close()
     exit()
