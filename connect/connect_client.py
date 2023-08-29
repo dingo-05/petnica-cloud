@@ -19,10 +19,26 @@ def receiveMessage(conn, length):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 bool = True
-while bool:
+while bool==True:
     username = input("Enter your username: ")
-    password = input("Enter your password: ")
-    database.verify_data(username, password)
+    if database.verify_username(username) == 1:
+        password = input("Enter your password: ")
+        if database.verify_password(password) == 1:
+            bool = False
+        else:
+            print("Incorrect password. ")
+            print("Try again. ")
+    else:
+        print("User not found. ")
+        print("Do you want to create new account? 1 - YES / 2 - NO")
+        choice = int(input())
+        if choice == 1:
+            password = input("Enter your password: ")
+            database.create_user(username, password)
+            bool = False
+
+
+
     #if(username is in database):
     #    ask password
     #else:

@@ -1,0 +1,129 @@
+import unittest, json, os, HtmlTestRunner
+
+# Define UserAccount class.
+class UserAccount(object):
+
+    # Returned dictionary status key
+    ret_status = 'status'
+
+    # Returned dictionary message key.
+    ret_msg = 'msg'
+
+    # This file is used to save user account in JSON format.
+    # The data format is something like '{"Jerry": "jerry,jerry@dev2qa.com"}':
+    account_save_file_path = './users.json'
+
+    # Login with user_name and password.     
+    def login(self, user_name, password):
+        ret = {}
+        try:
+            # Load exist user account from user account json file.
+            file_obj = open(self.account_save_file_path, 'r')
+            exist_user_account = json.load(file_obj)
+
+            # If the user_name related string do not exist.
+            if(''==exist_user_account[user_name]):
+                ret[self.ret_status] = False
+                ret[self.ret_msg] = "User name does not exist."
+            else:
+                # Loop for all the dictionary items.
+                # You can use exist_user_account[user_name] directly to check password,
+                # below code just for demo dictionary items iteration.
+                for key, value in exist_user_account.items():
+                    if(key==user_name):
+                        # Split the password,email
+                        list = value.split(",")
+
+                        # Get password value.
+                        tmp_password = list[0]
+
+                        if(tmp_password == password):
+                            ret[self.ret_status] = True
+                            ret[self.ret_msg] = "Login success."
+                        else:
+                            ret[self.ret_status] = False
+                            ret[self.ret_msg] = "Password is not correct."
+        except FileNotFoundError:
+            print(FileNotFoundError.__cause__)
+            ret[self.ret_status] = False
+            ret[self.ret_msg] = FileNotFoundError.__cause__
+        finally:
+            print(ret[self.ret_msg])
+            return ret
+       
+
+    # This function is used to regist user_name, password and email in ./user_account.json file.
+    def regist(self, user_name, password, email):
+        ret = {}
+        exist_user_account = {}
+
+        # If the user account file exist.
+        if(os.path.exists(self.account_save_file_path)):
+            # Load the JSON content in the file.
+            file_obj = open(self.account_save_file_path, 'r')
+            exist_user_account = json.load(file_obj)
+
+            # Loop in all user name if exist then tell user can not regist this one.
+            for key in exist_user_account:
+                if(key == user_name):
+                    ret[self.ret_status] = False
+                    ret[self.ret_msg] = user_name + " exist, please use another one."
+                    break
+        
+        # If the register user_name do not exist.     
+        if(ret[self.ret_status] != False):
+            # Open user account file with write permission.
+            file_obj = open(self.account_save_file_path, 'w')
+            # Construct user account data the format is username:password,email
+            # And add the new user account data to the exist_user_account dictionary.
+            exist_user_account[user_name]=password + "," + email
+
+            # Save new user account data in the JSON file.
+            json.dump(exist_user_account, file_obj)
+            ret[self.ret_status] = True
+            ret[self.ret_msg] = 'User account register successfully.'
+        
+        return ret
+         
+# TestUserAccount extends unittest.TestCase class.
+# This test case class is used to test UserAccount login and regist function.
+class TestUserAccount(unittest.TestCase):
+
+    '''
+    This class is used to make unittest for UserAccount class.
+    '''
+
+    def test_regist(self):
+        user_account = UserAccount()
+        ret = user_account.regist("Jerry", "jerry", "jerry@dev2qa.com")
+        # Assert regist method return data.
+        self.assertTrue(ret[user_account.ret_status], ret[user_account.ret_msg])
+        
+    def test_login(self):
+        user_account = UserAccount()
+        ret = user_account.login("Jerry", "jerry")
+        # Assert regist method return data.
+        self.assertTrue(ret[user_account.ret_status], ret[user_account.ret_msg])
+       
+# This is common function which can run special test.       
+def run_test_suite(test):
+    test_suite = unittest.TestSuite()
+    test_suite.addTest(test)
+
+    # Create HtmlTestRunner object and run the test suite.
+    test_runner = HtmlTestRunner.HTMLTestRunner(output="./")
+    test_runner.run(test_suite)   
+                
+def run_test_login():
+    run_test_suite(TestUserAccount('test_login'))
+    
+def run_test_regist():
+    run_test_suite(TestUserAccount('test_regist'))    
+        
+if(__name__=="__main__"):
+    # Run test login
+    # run_test_login()
+    # Run test regist
+    # run_test_regist()
+    # Run all test function.
+    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output="./"))
