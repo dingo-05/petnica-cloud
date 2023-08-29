@@ -16,9 +16,9 @@ def openMenu(command,con,path1,home_path1):
     elif(command == 'download'):
         return download()
     elif(command == 'mkdir'):
-        return makeDIR(text.split(" ")[1])
+        return makeDIR()
     elif(command == 'cd'):
-        return changeDIR(text.split(" ")[1])
+        return changeDIR()
     print('Unknown command')
     return ()
 
@@ -61,5 +61,36 @@ def download():
     with open(file_name, 'rb') as f:
             connbuf.put_bytes(f.read())
     return path
+def makeDIR():
+    print('Making dir')
+    dir_name=connbuf.get_utf8()
+    dir_path = os.path.join(path,dir_name)
+    if os.path.exists(dir_path):
+        connbuf.put_utf8('Directory already exsists')
+        return path
+    os.makedirs(dir_path)
+    connbuf.put_utf8('Directory succesfully created')
+    return path
     
+def changeDIR():
+    print('Changing dir')
+    dir_name=connbuf.get_utf8()
+    if dir_name=='..' and path==home_path:
+        connbuf.put_utf8('Cant go back')
+        return path
+    elif dir_name=='..':
+        array = path.split("\\")
+        array.pop()
+        dir_path = array[0]
+        backslash ='\\'
+        for i in range(1,len(array)):
+            dir_path = dir_path + backslash + array[i]
+        connbuf.put_utf8(dir_path)
+        return dir_path
+    dir_path = os.path.join(path,dir_name)
     
+    if not os.path.exists(dir_path):
+        connbuf.put_utf8('Directory not found')
+        return path
+    connbuf.put_utf8(dir_path)
+    return dir_path

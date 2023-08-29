@@ -75,8 +75,16 @@ def download(file_name):
     
     
 def makeDIR(dir_name):
-    sock_global.send(headers.appendHeaders('mkdir'))
-    sock_global.send(headers.appendHeaders(dir_name))
+    sbuf = buffer.Buffer(sock_global)
+    command = 'mkdir'
+    sbuf.put_utf8(command)
+    sbuf.put_utf8(dir_name)
+    message=sbuf.get_utf8()
+    print(message)
 def changeDIR(dir_name):
-    sock_global.send(headers.appendHeaders('cd'))
-    sock_global.send(headers.appendHeaders(dir_name))
+    sbuf = buffer.Buffer(sock_global)
+    command = 'cd'
+    sbuf.put_utf8(command)
+    sbuf.put_utf8(dir_name)
+    message=sbuf.get_utf8()
+    print(message)

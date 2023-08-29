@@ -24,7 +24,7 @@ def handleConnection(conn, addr):
     connbuf = buffer.Buffer(conn)
     username=connbuf.get_utf8()
     default="d:\\database\\"
-    home_path=default+username+'\\'
+    home_path=default+username
     path=home_path
     if not os.path.exists(path):
         os.makedirs(path)
