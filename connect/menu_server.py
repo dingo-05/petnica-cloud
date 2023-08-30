@@ -2,6 +2,7 @@ import socket
 import os
 import headers
 import buffer
+import shutil
 
 
 def openMenu(command,con,path1,home_path1):
@@ -19,6 +20,8 @@ def openMenu(command,con,path1,home_path1):
         return makeDIR()
     elif(command == 'cd'):
         return changeDIR()
+    elif(command == 'rm'):
+        return remove_item()
     print('Unknown command')
     return ()
 
@@ -94,3 +97,24 @@ def changeDIR():
         return path
     connbuf.put_utf8(dir_path)
     return dir_path
+def remove_item():
+    item_name = connbuf.get_utf8()  
+    item_path = os.path.join(path, item_name)  
+
+    if not os.path.exists(item_path):
+        connbuf.put_utf8('Item not found')
+        return path
+    
+    try:
+        if os.path.isfile(item_path):
+            os.remove(item_path)
+            connbuf.put_utf8(f'File {item_name} removed successfully')
+        elif os.path.isdir(item_path):
+            shutil.rmtree(item_path)
+            connbuf.put_utf8(f'Item {item_name} removed successfully')
+        else:
+            connbuf.put_utf8('Item is neither a file nor a directory')
+    except Exception as e:
+        connbuf.put_utf8(f'Error while removing item: {str(e)}')
+    
+    return path

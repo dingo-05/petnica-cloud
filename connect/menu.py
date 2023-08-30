@@ -23,7 +23,7 @@ def openMenu(text,sock):
     elif(command == 'rm'):
         return remove_item(text.split(" ", 1)[1])
     elif(command == 'help'):
-        print('There are folowing commands:\nupload - uploads file from the server\ndownload - downloads file from the server\nmkdir - create a new directory\ncd - change directory\nhelp - help with commands')
+        print('There are folowing commands:\nupload - uploads file from the server\ndownload - downloads file from the server\nmkdir - create a new directory\ncd - change directory\nxrm - remove item\nhelp - help with commands')
         return ()
     print('type help command for help')
     return ()
@@ -96,16 +96,10 @@ def remove_item(item_name):
     command_parts = item_name.split()
     command = 'rm'
     
-    if '-f' in command_parts:
-        force_remove = True
-        command_parts.remove('-f')
-    else:
-        force_remove = False
-    
     if len(command_parts) == 0:
         print("No item specified for removal.")
         return
-    elif '\\' in command_parts or '/' in command_parts:
+    if '\\' in command_parts or '/' in command_parts:
         print("Can't delete that directory")
         return
 
@@ -129,7 +123,7 @@ def remove_item(item_name):
 
     sbuf.put_utf8(command)
     sbuf.put_utf8(item)
-    sbuf.put_bool(force_remove)  
+      
     
     message = sbuf.get_utf8()
     print(message)
