@@ -2,6 +2,7 @@ import socket
 import os
 import headers
 import buffer
+import json
 
 
 def openMenu(text,sock):
@@ -19,6 +20,8 @@ def openMenu(text,sock):
         return makeDIR(text.split(" ")[1])
     elif(command == 'cd'):
         return changeDIR(text.split(" ")[1])
+    elif(command == 'rm'):
+        return remove_item(text.split(" ", 1)[1])
     elif(command == 'help'):
         print('There are folowing commands:\nupload - uploads file from the server\ndownload - downloads file from the server\nmkdir - create a new directory\ncd - change directory\nhelp - help with commands')
         return ()
@@ -87,4 +90,46 @@ def changeDIR(dir_name):
     sbuf.put_utf8(command)
     sbuf.put_utf8(dir_name)
     message=sbuf.get_utf8()
+    print(message)
+def remove_item(item_name):
+    sbuf = buffer.Buffer(sock_global)
+    command_parts = item_name.split()
+    command = 'rm'
+    
+    if '-f' in command_parts:
+        force_remove = True
+        command_parts.remove('-f')
+    else:
+        force_remove = False
+    
+    if len(command_parts) == 0:
+        print("No item specified for removal.")
+        return
+    elif '\\' in command_parts or '/' in command_parts:
+        print("Can't delete that directory")
+        return
+
+    item = command_parts[len(command_parts)-1]
+    
+    if item == '*':
+        confirm = input("Are you sure you want to delete all folders in the current directory? (yes/no): ")
+        if confirm.lower() == "yes":
+            current_directory = os.getcwd()
+            for root, dirs, files in os.walk(current_directory, topdown=False):
+                for dir_name in dirs:
+                    folder_path = os.path.join(root, dir_name)
+                    try:
+                        os.rmdir(folder_path)  # Remove the folder
+                        print("Deleted:", folder_path)
+                    except OSError as e:
+                        print("Error deleting folder:", e)
+            message = "All folders removed."
+        else:
+            message = "Operation canceled."
+
+    sbuf.put_utf8(command)
+    sbuf.put_utf8(item)
+    sbuf.put_bool(force_remove)  
+    
+    message = sbuf.get_utf8()
     print(message)
