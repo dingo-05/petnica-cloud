@@ -2,6 +2,9 @@ import socket
 import sys
 import json
 import database
+import headers
+import menu
+import buffer
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <ip> ")
@@ -48,24 +51,12 @@ while bool==True:
 
 sock.connect((SERVER_IP, SERVER_PORT))
 try:
+    sbuff=buffer.Buffer(sock)
+    sbuff.put_utf8(username)
     while True:
-        msg = input("Enter your message: ")
-        msg = f"[{username}]: {msg}"
-#        msg = headers.appendHeaders(msg)
-        sock.send(msg)
-
-#        try:
-#            msgSize = int.from_bytes(receiveMessage(sock, headers.HEADER_LEN))
-#            msg = b''
-#            while len(msg) < msgSize:
-#                msg += receiveMessage(sock, msgSize - len(msg))
-#            msg = msg.decode()
-#
-#        except Exception as e:
-#            print(f"Error: {e}")
-#            break
-#
-#        print(msg)
+        msg = input("Enter command: ")#change later with location in files
+        menu.openMenu(msg,sock)
+        print("Menu Closed")
 except KeyboardInterrupt:
     sock.close()
     exit()
