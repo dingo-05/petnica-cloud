@@ -1,5 +1,4 @@
 import json
-import os
 
 file_name = (r'D:\BOBAN\Desktop\Danilo\Petnica\rac1l\Projekat\petnica-cloud\connect\users.json')
 #lokacija fajla
@@ -13,6 +12,7 @@ def create_user(username, password):
             "username": username,
             "password": password
         }
+        print(password)
         data["users"].append(new_user)
         json_file.seek(0)
         json.dump(data, json_file, indent=4)
@@ -31,21 +31,14 @@ def create_user(username, password):
 def verify_username(username):
     provera = 0
     for user in data["users"]:
-        
-
         if user['username'] == username:
             print("User found successfully. ")
             provera = 1
             break
         else:
              provera = 2
-             
     return provera
-            
-            
-
-
-
+        
 def verify_password(password):
     provera = 0
     for user in data["users"]:
@@ -55,7 +48,6 @@ def verify_password(password):
             break
         else:
             provera = 2
-            
     return provera
             
             #provera podataka

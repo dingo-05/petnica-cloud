@@ -5,6 +5,7 @@ import database
 import headers
 import menu
 import buffer
+import hashlib
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <ip> ")
@@ -21,12 +22,16 @@ def receiveMessage(conn, length):
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+salt = "Branimir"
 bool = True
 while bool==True:
     username = input("Enter your username: ")
     if database.verify_username(username) == 1:
         password = input("Enter your password: ")
-        if database.verify_password(password) == 1:
+        database_password = password + salt
+        hashed_password = hashlib.md5(database_password.encode())
+        hashed_password = hashed_password.hexdigest()
+        if database.verify_password(hashed_password) == 1:
             bool = False
         else:
             print("Incorrect password. ")
@@ -37,7 +42,10 @@ while bool==True:
         choice = int(input())
         if choice == 1:
             password = input("Enter your password: ")
-            database.create_user(username, password)
+            database_password = password + salt
+            hashed_password = hashlib.md5(database_password.encode())
+            hashed_password = hashed_password.hexdigest()
+            database.create_user(username, hashed_password)
             bool = False
 
 
