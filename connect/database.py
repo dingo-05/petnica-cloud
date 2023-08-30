@@ -1,6 +1,6 @@
 import json
 
-file_name = (r'D:\BOBAN\Desktop\Danilo\Petnica\rac1l\Projekat\petnica-cloud\connect\users.json')
+file_name = (r'D:\!PETNICA\Projekat\http\petnica-cloud\connect\users.json')
 #lokacija fajla
 with open(file_name,'r+') as json_file:
         data = json.load(json_file)
