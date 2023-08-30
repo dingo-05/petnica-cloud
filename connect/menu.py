@@ -108,22 +108,14 @@ def remove_item(item_name):
     if item == '*':
         confirm = input("Are you sure you want to delete all folders in the current directory? (yes/no): ")
         if confirm.lower() == "yes":
-            current_directory = os.getcwd()
-            for root, dirs, files in os.walk(current_directory, topdown=False):
-                for dir_name in dirs:
-                    folder_path = os.path.join(root, dir_name)
-                    try:
-                        os.rmdir(folder_path)  # Remove the folder
-                        print("Deleted:", folder_path)
-                    except OSError as e:
-                        print("Error deleting folder:", e)
-            message = "All folders removed."
+            sbuf.put_utf8(command)
+            sbuf.put_utf8(item)
+            message = sbuf.get_utf8()  
         else:
             message = "Operation canceled."
-
-    sbuf.put_utf8(command)
-    sbuf.put_utf8(item)
-      
+    else:
+        sbuf.put_utf8(command)
+        sbuf.put_utf8(item)
+        message = sbuf.get_utf8()  
     
-    message = sbuf.get_utf8()
     print(message)
