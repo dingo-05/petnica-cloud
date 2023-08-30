@@ -99,11 +99,11 @@ def remove_item(item_name):
     if len(command_parts) == 0:
         print("No item specified for removal.")
         return
-    if '\\' in command_parts or '/' in command_parts:
-        print("Can't delete that directory")
+    if '\\' in item_name or '/' in item_name:
+        print("Can't delete that directory.")
         return
 
-    item = command_parts[len(command_parts)-1]
+    item = command_parts[-1]  
     
     if item == '*':
         confirm = input("Are you sure you want to delete all folders in the current directory? (yes/no): ")
