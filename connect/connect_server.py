@@ -5,6 +5,7 @@ import headers
 import os
 import buffer
 import menu_server
+import database
 
 
 SERVER_IP = socket.gethostbyname(socket.gethostname())
@@ -19,10 +20,29 @@ def receiveMessage(conn, length):
     if not msg:
         raise Exception("Connection closed")
     return msg
-
+bool = True
 def handleConnection(conn, addr):
     connbuf = buffer.Buffer(conn)
-    username=connbuf.get_utf8()
+    while bool==True:
+        username=connbuf.get_utf8()
+        if database.verify_username(username) == 1:
+            connbuf.put_utf8('1')
+            password = connbuf.get_utf8()
+            passGood = database.verify_password(password)
+            if passGood=='1':
+                connbuf.put_utf8('1')
+                break
+            else:
+                connbuf.put_utf8('0')
+        else:
+            connbuf.put_utf8('0')
+            choice = connbuf.get_utf8()
+            if(choice=='1'):
+                password = connbuf.get_utf8()
+                database.create_user(username,password)
+                break
+                
+    
     default="d:\\database\\"
     home_path=default+username
     path=home_path

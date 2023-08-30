@@ -1,0 +1,44 @@
+{
+    "users": [
+        {
+            "username": "Milos",
+            "password": "adsaddas"
+        },
+        {
+            "username": "Migfdgdlos",
+            "password": "adsadgdfgdfgdfddas"
+        },
+        {
+            "username": "Mladen",
+            "password": "brkovi"
+        },
+        {
+            "username": "Mladen",
+            "password": "brkovi"
+        },
+        {
+            "username": "Branimir",
+            "password": "Mratinkovic"
+        },
+        {
+            "username": "LebronJames",
+            "password": "stephencurry"
+        },
+        {
+            "username": "danilo",
+            "password": "pass"
+        },
+        {
+            "username": "nikola_s",
+            "password": "96729e0cefc4617ebcea6f9c40eded26"
+        },
+        {
+            "username": "pop",
+            "password": "d61f77dc6872a7d778106aa4e542132e"
+        },
+        {
+            "username": "dingo",
+            "password": "d61f77dc6872a7d778106aa4e542132e"
+        }
+    ]
+}
